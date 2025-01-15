@@ -1,0 +1,15 @@
+{
+  "name": "demowebshop-playwright-tdd",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "npx playwright test",
+    "format": "prettier --write '**/*.ts'"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.30.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8"
+  }
+}
