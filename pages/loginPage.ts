@@ -10,7 +10,6 @@ export class LoginPage {
         await this.page.goto('https://demowebshop.tricentis.com/login');
     }
 
-
     async fillLoginForm(email: string, password: string) {
         await this.page.fill('#Email', email);
         await this.page.waitForTimeout(1000);
@@ -21,7 +20,6 @@ export class LoginPage {
     async withRememberMe() {
         await this.page.click(this.rememberMeCheckboxSelector);
     }
-
 
     async login() {
         const loginButtonXPath = `//input[@class='button-1 login-button' and @type='submit' and @value='Log in']`;

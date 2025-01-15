@@ -18,3 +18,9 @@
    ```
 
 This project is set up for TDD with Playwright and TypeScript, focusing on a user registration feature.
+
+
+To make changes in the future:
+git add .
+git commit -m "Descriptive message"
+git push
