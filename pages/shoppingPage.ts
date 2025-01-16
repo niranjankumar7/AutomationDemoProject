@@ -17,6 +17,9 @@ export class ShoppingPage {
     private addToCartButtonBook1 = '//input[@class="button-2 product-box-add-to-cart-button" and @value="Add to cart" and contains(@onclick, "/catalog/13")]';
     private addToCartButtonBook2 = '//input[@class="button-2 product-box-add-to-cart-button" and @value="Add to cart" and contains(@onclick, "/catalog/22")]';
     private addToCartButtonNotebook = '//input[@class="button-2 product-box-add-to-cart-button" and @value="Add to cart" and contains(@onclick, "/catalog/31")]';
+    private buttonAddToCartJeans = `//input[@value='Add to cart' and contains(@class, 'product-box-add-to-cart-button')]`;
+
+    private searchBox = `//*[@id='small-searchterms']`;
 
     // Function to get the current cart count
     async getCartCount(): Promise<number> {
@@ -63,5 +66,17 @@ export class ShoppingPage {
         console.log('Adding a notebook to the cart...');
         await this.page.click(this.addToCartButtonNotebook);
         await this.page.waitForTimeout(1000);
+    }
+
+    async searchItemAndAddToCart() {
+        console.log('Searching Jeans')
+        await this.page.click(this.searchBox);
+        // Fill the search term in the search box
+        await this.page.fill(this.searchBox, 'Jeans');
+
+        // Simulate pressing the 'Enter' key to trigger the search
+        await this.page.press(this.searchBox, 'Enter');
+        await this.page.click(this.buttonAddToCartJeans);
+        await this.page.waitForTimeout(1000)
     }
 }

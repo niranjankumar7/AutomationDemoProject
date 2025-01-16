@@ -38,4 +38,16 @@ test.describe('Shopping Cart Tests', () => {
         // Validate cart count incremented by 1 (since 1 notebook was added)
         await shoppingPage.validateCartCount(initialCartCount + 1);
     });
+
+    test('Search and add the item to the cart', async ({ page }) => {
+        const shoppingPage = new ShoppingPage(page);
+        await shoppingPage.navigateToShoppingPage();
+        // Initial cart count
+        const initialCartCount = await shoppingPage.getCartCount();
+        console.log(`Initial cart count: ${initialCartCount}`);
+        // Search and add jeans to the cart
+        await shoppingPage.searchItemAndAddToCart();
+        // Validate cart count incremented by 1 (since 1 notebook was added)
+        await shoppingPage.validateCartCount(initialCartCount + 1);
+    })
 });
