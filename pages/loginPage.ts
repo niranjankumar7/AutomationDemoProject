@@ -44,4 +44,46 @@ export class LoginPage {
         console.log(`Remember Me checkbox state is as expected: ${isExpectedChecked ? 'checked' : 'unchecked'}`);
     }
 
+    async validateEmptyLoginDetails(expectedMessage: string) {
+        // Wait for the error message to appear
+        const errorSelector = '.validation-summary-errors span';
+        await this.page.waitForSelector(errorSelector, { timeout: 5000 });
+
+        // Get the text content of the error message
+        const actualMessage = await this.page.textContent(errorSelector);
+
+        // Validate the message
+        if (actualMessage?.trim() !== expectedMessage.trim()) {
+            throw new Error(`Login validation failed! Expected: "${expectedMessage}", but got: "${actualMessage}"`);
+        }
+    }
+
+    async clickForgotPassword() {
+        await this.page.click('a[href="/passwordrecovery"]');
+    }
+
+    async enterEmail(email: string) {
+        await this.page.fill('#Email', email);
+    }
+
+    async clickRecoverButton() {
+        await this.page.click('input[name="send-email"]');
+    }
+
+    async validateRecoveryMessage() {
+        // Wait for the element with the class 'result' to appear
+        await this.page.waitForSelector('.result', { timeout: 5000 });
+
+        // Retrieve the text content of the result message
+        const resultMessage = await this.page.textContent('.result');
+
+        // Validate the message content
+        if (resultMessage?.trim() !== 'Email with instructions has been sent to you.') {
+            throw new Error(
+                `Validation failed! Expected: "Email with instructions has been sent to you.", but got: "${resultMessage?.trim()}"`
+            );
+        }
+    }
+
+
 }
