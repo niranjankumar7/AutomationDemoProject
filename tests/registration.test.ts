@@ -20,36 +20,39 @@ test.describe('User Registration Tests', () => {
   });
 
   // Negative Scenarios
+  // Negative Scenarios
   test.describe('Negative Registration Scenarios', () => {
     test('Registration with Invalid Email', async () => {
       await registrationPage.fillRegistrationForm('John', 'Doe', 'invalid-email', 'password123', 'M');
       await registrationPage.submitForm();
 
-      const errorMessage = await registrationPage.getErrorMessage();
+      // Specify the selector for the invalid email error
+      const errorMessage = await registrationPage.getErrorMessage('span[for="Email"]');
       expect(errorMessage).toContain('Wrong email');
     });
+  });
 
-    test('Duplicate User Registration', async () => {
-      await registrationPage.fillRegistrationForm('John', 'Doe', 'existing.email@example.com', 'password123', 'M');
-      await registrationPage.submitForm();
 
-      const errorMessage = await registrationPage.userDuplicationError();
-      expect(errorMessage).toContain('The specified email already exists');
-    });
+  test('Duplicate User Registration', async () => {
+    await registrationPage.fillRegistrationForm('John', 'Doe', 'existing.email@example.com', 'password123', 'M');
+    await registrationPage.submitForm();
 
-    test('User tries to register with mismatched password and confirm password', async () => {
-      await registrationPage.validatePasswordMismatchError(
-        'John',
-        'Doe',
-        'john.doe@example.com',
-        'Password123',
-        'DifferentPassword123',
-        'M'
-      );
+    const errorMessage = await registrationPage.userDuplicationError();
+    expect(errorMessage).toContain('The specified email already exists');
+  });
 
-      await registrationPage.submitForm();
+  test('User tries to register with mismatched password and confirm password', async () => {
+    await registrationPage.validatePasswordMismatchError(
+      'John',
+      'Doe',
+      'john.doe@example.com',
+      'Password123',
+      'DifferentPassword123',
+      'M'
+    );
 
-      await registrationPage.validatePasswordMismatchErrorMessage();
-    });
+    await registrationPage.submitForm();
+
+    await registrationPage.validatePasswordMismatchErrorMessage();
   });
 });
