@@ -9,5 +9,8 @@ export default defineConfig({
     headless: false,  // Open the browser window for interactive tests
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    launchOptions: {
+      slowMo: 500, // Add a delay of 500ms between each action
+    },
   },
 });
