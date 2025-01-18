@@ -7,23 +7,27 @@ test.describe('User Registration Tests', () => {
   // Common setup for each test
   test.beforeEach(async ({ page }) => {
     registrationPage = new RegistrationPage(page);
+    await page.context().clearCookies();
+    await page.context().clearPermissions();
     await registrationPage.navigateToRegistrationPage();
   });
 
+
   // Positive Scenario
   test('Successful User Registration', async () => {
-    await registrationPage.fillRegistrationForm('John', 'Doe', 'john1aa1.doe@example.com', 'password123', 'M');
+    const randomEmail = registrationPage.generateRandomEmail('niranjan.kumar');
+    await registrationPage.fillRegistrationForm('Niranjan', 'Kumar', randomEmail, 'password123', 'M');
     await registrationPage.submitForm();
 
     const successMessage = await registrationPage.getSuccessMessage();
     expect(successMessage).toContain('Your registration completed');
   });
 
-  // Negative Scenarios
+
   // Negative Scenarios
   test.describe('Negative Registration Scenarios', () => {
     test('Registration with Invalid Email', async () => {
-      await registrationPage.fillRegistrationForm('John', 'Doe', 'invalid-email', 'password123', 'M');
+      await registrationPage.fillRegistrationForm('Niranjan', 'Kumar', 'invalid-email', 'password123', 'M');
       await registrationPage.submitForm();
 
       // Specify the selector for the invalid email error
@@ -34,10 +38,11 @@ test.describe('User Registration Tests', () => {
 
 
   test('Duplicate User Registration', async () => {
-    await registrationPage.fillRegistrationForm('John', 'Doe', 'existing.email@example.com', 'password123', 'M');
+    await registrationPage.fillRegistrationForm('niranjan', 'kumar', 'niranjan@ggwp.com', 'password123', 'M');
     await registrationPage.submitForm();
 
     const errorMessage = await registrationPage.userDuplicationError();
+    console.log(`Error message: ${errorMessage}`); // Debug log
     expect(errorMessage).toContain('The specified email already exists');
   });
 

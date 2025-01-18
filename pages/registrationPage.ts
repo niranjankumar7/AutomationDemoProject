@@ -35,6 +35,7 @@ export class RegistrationPage {
     await this.page.fill('#ConfirmPassword', password);
   }
 
+
   // Submit the registration form
   async submitForm() {
     console.log('Submitting the registration form...');
@@ -57,10 +58,24 @@ export class RegistrationPage {
 
   // Handle duplication error (if user already exists)
   async userDuplicationError(): Promise<string> {
-    console.log('Checking for user duplication error...');
-    await this.page.waitForSelector('li', { timeout: TIMEOUT });
-    return (await this.page.textContent('li'))?.trim() ?? '';
+    // Define the locator for the error message
+    const errorLocator = this.page.locator('.validation-summary-errors ul li');
+
+    // Wait for the error message to be visible
+    await errorLocator.waitFor({ state: 'visible' });
+
+    // Fetch the text content of the error message
+    const errorMessage = await errorLocator.textContent();
+
+    // Handle potential null value and return a default value if necessary
+    if (!errorMessage) {
+      throw new Error('Error message element found, but it has no text content.');
+    }
+
+    return errorMessage;
   }
+
+
 
   // Validate password mismatch error
   async validatePasswordMismatchError(
@@ -102,4 +117,10 @@ export class RegistrationPage {
       );
     }
   }
+
+  generateRandomEmail(baseEmail: string): string {
+    const randomNumber = Math.floor(100 + Math.random() * 900); // Generate a random 3-digit number
+    return `${baseEmail}${randomNumber}@ggwp.com`;
+  }
+
 }
